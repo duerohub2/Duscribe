@@ -26,10 +26,17 @@ export default function Home() {
 
     setLoading(true); setResult(null);
     try {
-      setStatus({ text: STATUS.UPLOADING, type: '' });
+      setStatus({ text: 'MENGUNGGAH FILE... 0%', type: '' });
       
-      // FIX BLOB: Ubah ke public
-      const blob = await upload(file.name, file, { access: 'public', handleUploadUrl: '/api/blob-upload' });
+      const blob = await upload(file.name, file, { 
+        access: 'public', 
+        handleUploadUrl: '/api/blob-upload',
+        // INI KODE BARU: Buat nampilin persentase upload
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+          setStatus({ text: `MENGUNGGAH FILE... ${percent}%`, type: '' });
+        }
+      });
 
       setStatus({ text: STATUS.TRANSCRIBING, type: '' });
       const res = await fetch('/api/transcribe', {
@@ -38,11 +45,12 @@ export default function Home() {
         body: JSON.stringify({ url: blob.url, model, language }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Gagal');
+      if (!res.ok) throw new Error(data.error || 'Gagal Transkripsi');
 
       setResult(data); setFilename(file.name); setStatus({ text: STATUS.SUCCESS, type: 'success' });
       setHistory(saveToHistory({ filename: file.name, model, result: data }));
     } catch (err) {
+      // INI KODE BARU: Biar error aslinya muncul di layar
       setStatus({ text: 'ERROR: ' + err.message.toUpperCase(), type: 'error' });
     } finally { setLoading(false); }
   }
