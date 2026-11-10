@@ -18,7 +18,13 @@ export async function POST(request) {
     if (!url) return Response.json({ error: 'URL audio tidak ditemukan' }, { status: 400 });
     blobUrl = url;
 
-    const audioRes = await fetch(url);
+    // --- INI BAGIAN YANG DIUBAH (Tambahin token biar bisa baca file private) ---
+    const audioRes = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}`
+      }
+    });
+    
     if (!audioRes.ok) throw new Error('Gagal mengambil file dari storage');
 
     const buffer = Buffer.from(await audioRes.arrayBuffer());
