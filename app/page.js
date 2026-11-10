@@ -27,8 +27,9 @@ export default function Home() {
     setLoading(true); setResult(null);
     try {
       setStatus({ text: STATUS.UPLOADING, type: '' });
-      // --- INI BAGIAN YANG DIUBAH JADI PRIVATE ---
-      const blob = await upload(file.name, file, { access: 'private', handleUploadUrl: '/api/blob-upload' });
+      
+      // FIX BLOB: Ubah ke public
+      const blob = await upload(file.name, file, { access: 'public', handleUploadUrl: '/api/blob-upload' });
 
       setStatus({ text: STATUS.TRANSCRIBING, type: '' });
       const res = await fetch('/api/transcribe', {
@@ -56,7 +57,7 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>TRANSCRIBE</h1>
+      <h1>Transcribe</h1>
       <UploadPanel
         onFileChange={(e) => { const f = e.target.files?.[0] || null; setFile(f); setFilename(f?.name || ''); }}
         model={model} onModelChange={(e) => setModel(e.target.value)}
