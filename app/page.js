@@ -27,7 +27,8 @@ export default function Home() {
     setLoading(true); setResult(null);
     try {
       setStatus({ text: STATUS.UPLOADING, type: '' });
-      const blob = await upload(file.name, file, { access: 'public', handleUploadUrl: '/api/blob-upload' });
+      // --- INI BAGIAN YANG DIUBAH JADI PRIVATE ---
+      const blob = await upload(file.name, file, { access: 'private', handleUploadUrl: '/api/blob-upload' });
 
       setStatus({ text: STATUS.TRANSCRIBING, type: '' });
       const res = await fetch('/api/transcribe', {
