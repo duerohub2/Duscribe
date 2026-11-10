@@ -16,12 +16,12 @@ export default function UploadPanel({
 }) {
   return (
     <div className="panel">
-      <label className="label">AUDIO / VIDEO</label>
+      <label className="label">Audio / Video</label>
       <input type="file" accept={ACCEPTED_TYPES} onChange={onFileChange} className="file-input" />
       <div className="hint">Maksimal 25MB</div>
 
-      <PixelSelect label="MODE" value={model} onChange={onModelChange} options={MODELS} />
-      <PixelSelect label="BAHASA" value={language} onChange={onLanguageChange} options={LANGUAGES} />
+      <PixelSelect label="Mode" value={model} onChange={onModelChange} options={MODELS} />
+      <PixelSelect label="Bahasa" value={language} onChange={onLanguageChange} options={LANGUAGES} />
 
       <button onClick={onTranscribe} disabled={loading} className="btn">
         {loading ? 'MEMPROSES...' : 'MULAI TRANSKRIPSI'}
